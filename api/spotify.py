@@ -13,7 +13,7 @@ def get_name_and_artist_from_url(url):
     _log.info("Searching for track: " + url)
 
     track = sp.track(url)
-    track_formatted = '{} {}'.format(track['name'], ' '.join(track['artists'][0]['name']))
+    track_formatted = track['name'] + ' ' + track['artists'][0]['name']
 
     _log.info("Found track: " + track_formatted)
 

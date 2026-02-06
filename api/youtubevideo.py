@@ -31,6 +31,7 @@ def search_video(query: str) -> YouTubeVideo:
         '?key={}'
         '&part=snippet'
         '&maxResults=1'
+        '&type=video'
         '&q={}'.format(YOUTUBE_API_KEY, query)
     )
     content = json_loads(yt_r.content)

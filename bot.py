@@ -1,6 +1,7 @@
 import discord
 from api.youtubevideo import search_video
 from api.spotify import get_name_and_artist_from_url
+from api.youtubemusic import search_youtube_music
 from keys import BOT_TOKEN
 from logger import getLogger
 from embeds import YouTubeVideoEmbed
@@ -22,9 +23,10 @@ async def on_message(message):
         return
 
     if message.content.startswith('https://open.spotify.com/track/'):
-        _log.info("[DISCORD] Spotify URL found in chat: " + message.content)
+        _log.info("Spotify URL found in chat: " + message.content)
 
         track = get_name_and_artist_from_url(message.content)
+        #youtubemusic_result = search_youtube_music(track)
         result = search_video(track)
 
         await message.channel.send(embed=YouTubeVideoEmbed(result))
