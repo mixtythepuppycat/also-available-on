@@ -4,7 +4,7 @@ from api.spotify import get_name_and_artist_from_url
 from api.youtubemusic import search_youtube_music
 from keys import BOT_TOKEN
 from logger import getLogger
-from embeds import YouTubeVideoEmbed
+from embeds import YouTubeEmbed
 
 _log = getLogger(__name__)
 
@@ -26,10 +26,10 @@ async def on_message(message):
         _log.info("Spotify URL found in chat: " + message.content)
 
         track = get_name_and_artist_from_url(message.content)
-        #youtubemusic_result = search_youtube_music(track)
-        result = search_video(track)
+        ytvideo = search_video(track)
+        ytmusic = search_youtube_music(track)
 
-        await message.channel.send(embed=YouTubeVideoEmbed(result))
+        await message.channel.send(embed=YouTubeEmbed(ytvideo, ytmusic))
 
 _log.info("STARTING BOT")
 client.run(BOT_TOKEN)

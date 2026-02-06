@@ -1,5 +1,6 @@
 from discord import Embed, Color
 from api.youtubevideo import YouTubeVideo
+from api.youtubemusic import YouTubeMusic
 import html
 
 YOUTUBE_COLOR = Color.from_rgb(255, 0, 0)
@@ -14,13 +15,22 @@ class BaseEmbed(Embed):
         super().__init__(*args, **kwargs)
         self.color = Color.blurple()
 
-class YouTubeVideoEmbed(BaseEmbed):
-    def __init__(self, video: YouTubeVideo, *args, **kwargs) -> None:
+class YouTubeEmbed(BaseEmbed):
+    def __init__(self, video: YouTubeVideo, music: YouTubeMusic, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.title=html.unescape(video.title)
-        self.description=markdown_url(video.video_link)
         self.color = YOUTUBE_COLOR
         self.set_thumbnail(url=video.video_thumbnail)
+        self.add_field(
+            name='YouTube',
+            value=video.video_link,
+            inline=False
+        )
+        self.add_field(
+            name='YouTube Music',
+            value=music.music_link,
+            inline=False
+        )
         self.add_field(
             name='Description',
             value=video.description,
