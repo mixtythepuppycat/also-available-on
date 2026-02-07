@@ -1,5 +1,7 @@
 from ytmusicapi import YTMusic
 from logger import getLogger
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 
 _log = getLogger(__name__)
 
@@ -25,3 +27,13 @@ def search_youtube_music(query):
     else:
         video = YouTubeMusic(content)
         return video
+    
+def get_name_and_artist_from_url(url):
+    ytmusic = YTMusic()
+
+    parsed_url = urlparse(url)
+    videoId = parse_qs(parsed_url.query)['v'][0]
+
+    content = ytmusic.get_song(videoId)
+
+    return content['videoDetails']['author'] + " " + content['videoDetails']['title']
