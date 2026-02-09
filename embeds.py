@@ -1,6 +1,5 @@
 from discord import Embed, Color
-from api.youtubevideo import YouTubeVideo
-from api.youtubemusic import YouTubeMusic
+from api.track_services import ServiceNameEnum, Track
 import html
 
 YOUTUBE_COLOR = Color.from_rgb(255, 0, 0)
@@ -16,23 +15,32 @@ class BaseEmbed(Embed):
         self.color = Color.blurple()
 
 class YouTubeEmbed(BaseEmbed):
-    def __init__(self, video: YouTubeVideo, music: YouTubeMusic, *args, **kwargs) -> None:
+    def __init__(self, tracks: list[Track], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.title=html.unescape(video.title)
-        self.color = YOUTUBE_COLOR
-        self.set_thumbnail(url=video.video_thumbnail)
-        self.add_field(
-            name='YouTube',
-            value=video.video_link,
-            inline=False
-        )
-        self.add_field(
-            name='YouTube Music',
-            value=music.music_link,
-            inline=False
-        )
+
+        for track in tracks:
+            if track.get_service_name() is ServiceNameEnum.YOUTUBE:
+                self.title=html.unescape(track.title)
+                self.color = YOUTUBE_COLOR
+                self.set_thumbnail(url=track.get_video_thumbnail())
+
+                self.add_field(
+                    name='YouTube',
+                    value=track.get_link(),
+                    inline=False
+                )
+
+                # add description as last field
+                description = track.description,
+            else:
+                self.add_field(
+                    name=track.get_service_name().value,
+                    value=track.get_link(),
+                    inline=False
+                )
+
         self.add_field(
             name='Description',
-            value=video.description,
+            value=description,
             inline=False
         )

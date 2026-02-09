@@ -1,8 +1,7 @@
 import discord
-import api.youtubevideo
-import api.spotify
-import api.youtubemusic 
-from keys import BOT_TOKEN
+from api.track_service_names import ServiceNameEnum
+from api.track_service_util import get_tracks_from_url
+from keys import BOT_TOKEN, CHANNEL_NAME
 from logger import getLogger
 from embeds import YouTubeEmbed
 
@@ -19,25 +18,22 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user or message.channel.name != "music":
+    if message.author == client.user or message.channel.name != CHANNEL_NAME:
         return
 
     if message.content.startswith('https://open.spotify.com/track/'):
         _log.info("Spotify URL found in chat: " + message.content)
 
-        track = api.spotify.get_name_and_artist_from_url(message.content)
-        ytvideo = api.youtubevideo.search_video(track)
-        ytmusic = api.youtubemusic.search_youtube_music(track)
+        query, tracks = get_tracks_from_url(message.content, ServiceNameEnum.SPOTIFY)
 
-        await message.channel.send(embed=YouTubeEmbed(ytvideo, ytmusic))
+        await message.channel.send(embed=YouTubeEmbed(tracks))
 
     if message.content.startswith('https://music.youtube.com/watch?v='):
         _log.info("YouTube Music URL found in chat: " + message.content)
         
-        track = api.youtubemusic.get_name_and_artist_from_url(message.content)
-        result = api.spotify.search_spotify(track)
+        query, tracks = get_tracks_from_url(message.content, ServiceNameEnum.YOUTUBE_MUSIC)
 
-        await message.channel.send(result.music_link)
+        await message.channel.send(embed=YouTubeEmbed(tracks))
 
 
 _log.info("STARTING BOT")
