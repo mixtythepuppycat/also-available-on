@@ -14,7 +14,7 @@ class BaseEmbed(Embed):
         super().__init__(*args, **kwargs)
         self.color = Color.blurple()
 
-class YouTubeEmbed(BaseEmbed):
+class TracksEmbed(BaseEmbed):
     def __init__(self, tracks: list[Track], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
