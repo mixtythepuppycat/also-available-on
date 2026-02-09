@@ -27,7 +27,8 @@ class SpotifyService(TrackService):
         return ServiceNameEnum.SPOTIFY
     
     def search_for_track(self, query) -> Track:
-        track = self._sp.search(query, limit=1, type='track')
+        # Spotify's search doesn't always return the correct track if you limit to 1, so grab more and take the first result
+        track = self._sp.search(query, limit=5, type='track')
         song = SpotifyTrack(track)
 
         return song
