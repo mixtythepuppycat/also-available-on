@@ -8,12 +8,17 @@ from spotipy.oauth2 import SpotifyClientCredentials
 _log = getLogger(__name__)
 
 class SpotifyTrack(Track):
-    def __init__(self, payload: dict) -> None:
-        item: dict = payload['tracks']['items'][0]
-        self.video_id: str = item['id']
+
+    def __init__(self, payload: dict = None, url: str = None) -> None:
+        if payload is not None:
+            item: dict = payload['tracks']['items'][0]
+            self.video_id: str = item['id']
+            self.link_format: str = f'https://open.spotify.com/track/{self.video_id}'
+        if url is not None:
+            self.link_format: str = url
 
     def get_link(self) -> str:
-        return f'https://open.spotify.com/track/{self.video_id}'
+        return self.link_format
     
     def get_service_name(self) -> ServiceNameEnum:
         return ServiceNameEnum.SPOTIFY
@@ -43,4 +48,5 @@ class SpotifyService(TrackService):
 
         return track_formatted
 
-  
+    def get_track_from_url(self, url: str) -> Track:
+        return SpotifyTrack(url=url)

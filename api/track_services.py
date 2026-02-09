@@ -22,3 +22,7 @@ class TrackService(ABC):
     @abstractmethod
     def get_service_name(self) -> ServiceNameEnum:
         pass
+    
+    @abstractmethod
+    def get_track_from_url(self, url: str) -> Track:
+        pass

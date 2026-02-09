@@ -8,16 +8,20 @@ from api.track_service_names import ServiceNameEnum
 _log = getLogger(__name__)
 
 class YouTubeVideoTrack(Track):
-    def __init__(self, payload: dict) -> None:
-        item: dict = payload.get('items', [{}])[0]
-        snippet: dict = item.get('snippet', {})
-        self.video_id: str = item.get('id', {}).get('videoId')
-        self.title: str = snippet.get('title')
-        self.description: str = snippet.get('description')
-        self.published_date: str = snippet.get('publishTime', '')[:10]
+    def __init__(self, payload: dict = None, url: str = None) -> None:
+        if payload is not None:
+            item: dict = payload.get('items', [{}])[0]
+            snippet: dict = item.get('snippet', {})
+            self.video_id: str = item.get('id', {}).get('videoId')
+            self.title: str = snippet.get('title')
+            self.description: str = snippet.get('description')
+            self.published_date: str = snippet.get('publishTime', '')[:10]
+            self.link_format: str = f'https://www.youtube.com/watch?v={self.video_id}'
+        if url is not None:
+            self.link_format: str = url
 
     def get_link(self) -> str:
-        return f'https://www.youtube.com/watch?v={self.video_id}'
+        return self.link_format
 
     def get_video_thumbnail(self) -> str:
         return f'https://i.ytimg.com/vi/{self.video_id}/default.jpg'
@@ -54,3 +58,6 @@ class YouTubeVideoService(TrackService):
     def get_name_and_artist_from_url(self, url: str) -> str:
         # TODO: implement
         return ""
+    
+    def get_track_from_url(self, url: str) -> Track:
+        return YouTubeVideoTrack(url=url)

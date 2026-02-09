@@ -27,7 +27,7 @@ class TracksEmbed(BaseEmbed):
                 self.add_field(
                     name='YouTube',
                     value=track.get_link(),
-                    inline=False
+                    inline=True
                 )
 
                 # add description as last field
@@ -36,7 +36,7 @@ class TracksEmbed(BaseEmbed):
                 self.add_field(
                     name=track.get_service_name().value,
                     value=track.get_link(),
-                    inline=False
+                    inline=True
                 )
 
         self.add_field(
