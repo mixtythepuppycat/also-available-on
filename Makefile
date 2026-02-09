@@ -15,8 +15,7 @@ minor_version = $(shell sed -n -e 's/^\s*minor\s*=\s*//p' docker-config.ini)
 patch_version = $(shell sed -n -e 's/^\s*patch\s*=\s*//p' docker-config.ini)
 registry = $(shell sed -n -e 's/^\s*registryname\s*=\s*//p' docker-config.ini)
 
-docker-build-tag: docker-version.txt
-	docker build .
-	docker image tag mixtabot:latest $(registry)/mixtabot:$(major_version).$(minor_version).$(patch_version)
+docker-build-tag: docker-config.ini
+	docker build -t $(registry)/mixtabot:$(major_version).$(minor_version).$(patch_version) .
 	docker push $(registry)/mixtabot:$(major_version).$(minor_version).$(patch_version)
 	
