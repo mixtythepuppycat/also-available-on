@@ -30,7 +30,7 @@ class YouTubeMusicService(TrackService):
         return ServiceNameEnum.YOUTUBE_MUSIC
 
     def search_for_track(self, query: str) -> Track:
-        content = self._ytmusic.search(query)
+        content = self._ytmusic.search(query, filter='songs')
 
         if content.count == 0:
             _log.error("Could find a song with query: " + query)
