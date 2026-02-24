@@ -31,7 +31,7 @@ async def on_message(message):
             await message.channel.send(embed=discordEmbed)
         except:
             _log.exception("Error during Spotify link")
-            await message.reply("Sorry! I saw your Spotify link but something went wrong on my end. <@795076172886048828> fix me!")
+            await message.reply("Sorry! I saw your Spotify link but something went wrong on my end.")
 
     if message.content.startswith('https://music.youtube.com/watch?v='):
         _log.info("YouTube Music URL found in chat: " + message.content)
@@ -43,7 +43,7 @@ async def on_message(message):
             await message.channel.send(embed=discordEmbed)
         except:
             _log.exception("Error during YouTube Music link")
-            await message.reply("Sorry! I saw your YouTube Music link but something went wrong on my end. <@795076172886048828> fix me!")
+            await message.reply("Sorry! I saw your YouTube Music link but something went wrong on my end.")
 
 _log.info("STARTING BOT")
 client.run(BOT_TOKEN)
