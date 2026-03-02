@@ -59,7 +59,8 @@ class YouTubeVideoService(TrackService):
     
     def get_url_starts_with() -> str:
         # Don't currently trigger searches on YouTube links, since it's already a free service
-        return None
+        # '<' will never be in an url
+        return "<"
     
     def get_name_and_artist_from_url(self, url: str) -> str:
         # Don't currently trigger searches on YouTube links, since it's already a free service

@@ -31,18 +31,19 @@ def get_tracks_from_url(url: str, serviceName: ServiceNameEnum) -> list[Track]:
 def get_tracks_from_message(message: str):
     urls = re.findall(r'(https?://\S+)', message)
 
-    # Just grab the first match since the main use case is just for single links
-    match = next(((service, url) 
-                  for service in allMusicServices 
-                  for url in urls 
-                  if url.startswith(service.get_url_starts_with())
-                  ), None)
+    if urls:
+        # Just grab the first match since the main use case is just for single links
+        match = next(((service, url) 
+                    for service in allMusicServices 
+                    for url in urls 
+                    if service.get_url_starts_with() in url
+                    ), None)
 
-    if match:
-        service, url = match
+        if match:
+            service, url = match
 
-        _log.info(f"{service.get_service_name().value} URL found: {url}")
+            _log.info(f"{service.get_service_name().value} URL found: {url}")
 
-        return get_tracks_from_url(url, service.get_service_name())
+            return get_tracks_from_url(url, service.get_service_name())
 
     return None
