@@ -35,22 +35,30 @@ class YouTubeMusicService(TrackService):
         return _link_starts_with
 
     def search_for_track(self, query: str) -> Track:
+        _log.info("Searching for " + query)
+
         content = self._ytmusic.search(query, filter='songs')
 
         if content.count == 0:
             _log.error("Could find a song with query: " + query)
             return 
         else:
+            _log.info("Found")
             video = YouTubeMusicTrack(content)
             return video
         
     def get_name_and_artist_from_url(self, url: str) -> str:
+        _log.info("Searching for track: " + url)
+
         parsed_url = urlparse(url)
         videoId = parse_qs(parsed_url.query)['v'][0]
 
         content = self._ytmusic.get_song(videoId)
+        track_formatted = content['videoDetails']['author'] + " " + content['videoDetails']['title']
+        
+        _log.info("Found track: " + track_formatted)
 
-        return content['videoDetails']['author'] + " " + content['videoDetails']['title']
+        return track_formatted
     
     def get_track_from_url(self, url: str) -> Track:
         return YouTubeMusicTrack(url=url)
