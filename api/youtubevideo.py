@@ -7,6 +7,8 @@ from api.track_service_names import ServiceNameEnum
 
 _log = getLogger(__name__)
 
+_link_starts_with = 'https://www.youtube.com/watch?v='
+
 class YouTubeVideoTrack(Track):
     def __init__(self, payload: dict = None, url: str = None) -> None:
         if payload is not None:
@@ -16,7 +18,7 @@ class YouTubeVideoTrack(Track):
             self.title: str = snippet.get('title')
             self.description: str = snippet.get('description')
             self.published_date: str = snippet.get('publishTime', '')[:10]
-            self.link_format: str = f'https://www.youtube.com/watch?v={self.video_id}'
+            self.link_format: str = f'{_link_starts_with}{self.video_id}'
         if url is not None:
             self.link_format: str = url
 
@@ -31,7 +33,7 @@ class YouTubeVideoTrack(Track):
 
 class YouTubeVideoService(TrackService):
         
-    def get_service_name(self) -> ServiceNameEnum:
+    def get_service_name() -> ServiceNameEnum:
         return ServiceNameEnum.YOUTUBE
 
     def search_for_track(self, query: str) -> Track:
@@ -55,9 +57,13 @@ class YouTubeVideoService(TrackService):
 
         return video
     
+    def get_url_starts_with() -> str:
+        # Don't currently trigger searches on YouTube links, since it's already a free service
+        return None
+    
     def get_name_and_artist_from_url(self, url: str) -> str:
-        # TODO: implement
-        return ""
+        # Don't currently trigger searches on YouTube links, since it's already a free service
+        return None
     
     def get_track_from_url(self, url: str) -> Track:
         return YouTubeVideoTrack(url=url)

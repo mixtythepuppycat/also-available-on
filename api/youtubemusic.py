@@ -7,12 +7,14 @@ from api.track_service_names import ServiceNameEnum
 
 _log = getLogger(__name__)
 
+_link_starts_with = 'https://music.youtube.com/watch?v='
+
 class YouTubeMusicTrack(Track):
     def __init__(self, payload: dict = None, url: str = None) -> None:
         if payload is not None:
             item: dict = payload[0]
             self.video_id: str = item['videoId']
-            self.link_format = f'https://music.youtube.com/watch?v={self.video_id}'
+            self.link_format = f'{_link_starts_with}{self.video_id}'
         if url is not None:
             self.link_format: str = url
 
@@ -26,8 +28,11 @@ class YouTubeMusicService(TrackService):
     def __init__(self): 
         self._ytmusic = YTMusic()
 
-    def get_service_name(self) -> ServiceNameEnum:
+    def get_service_name() -> ServiceNameEnum:
         return ServiceNameEnum.YOUTUBE_MUSIC
+    
+    def get_url_starts_with() -> str:
+        return _link_starts_with
 
     def search_for_track(self, query: str) -> Track:
         content = self._ytmusic.search(query, filter='songs')

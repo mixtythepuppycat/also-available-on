@@ -7,13 +7,15 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 _log = getLogger(__name__)
 
+_link_starts_with = 'https://open.spotify.com/track/'
+
 class SpotifyTrack(Track):
 
     def __init__(self, payload: dict = None, url: str = None) -> None:
         if payload is not None:
             item: dict = payload['tracks']['items'][0]
             self.video_id: str = item['id']
-            self.link_format: str = f'https://open.spotify.com/track/{self.video_id}'
+            self.link_format: str = f'{_link_starts_with}{self.video_id}'
         if url is not None:
             self.link_format: str = url
 
@@ -28,8 +30,11 @@ class SpotifyService(TrackService):
         self._sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=SPOTIFY_CLIENT_ID,
                                                            client_secret=SPOTIFY_CLIENT_SECRET))
     
-    def get_service_name(self) -> ServiceNameEnum:
+    def get_service_name() -> ServiceNameEnum:
         return ServiceNameEnum.SPOTIFY
+    
+    def get_url_starts_with() -> str:
+        return _link_starts_with
     
     def search_for_track(self, query) -> Track:
         # Spotify's search doesn't always return the correct track if you limit to 1, so grab more and take the first result
