@@ -1,10 +1,12 @@
 venv/bin/python:
 	virtualenv venv
 	venv/bin/pip install -r requirements.txt
+	venv/bin/pip install -r requirements-test.txt
 
 install: requirements.txt
 	virtualenv venv
 	venv/bin/pip install -r requirements.txt
+	venv/bin/pip install -r requirements-test.txt
 
 .PHONY: run
 run: venv/bin/python
